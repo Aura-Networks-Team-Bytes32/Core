@@ -17,7 +17,8 @@ interface NavbarProps {
     | "creditcard"
     | "fdcard"
     | "home"
-    | "cards";
+    | "cards"
+    | "merchant";
 }
 
 const Navbar = ({ pageType }: NavbarProps) => {

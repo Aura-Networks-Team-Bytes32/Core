@@ -1,4 +1,5 @@
 import { IRelayPKP } from "@lit-protocol/types";
+import hashCardDetails from "./cardHash";
 
 export const setCardDetails = (cardDetails: {
   cardNumber: string;
@@ -10,13 +11,37 @@ export const setCardDetails = (cardDetails: {
       "cardDetails",
       JSON.stringify(cardDetails)
     );
+    localStorage.setItem(
+      "cardHash",
+      hashCardDetails(cardDetails)
+    );
   }
+};
+
+export const setUserDetails = (worldId: string) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("worldId", worldId);
+  }
+};
+
+export const getUserDetails = () => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("worldId");
+  }
+  return null;
 };
 
 export const getCardDetails = () => {
   if (typeof window !== "undefined") {
     const details = localStorage.getItem("cardDetails");
     return details ? JSON.parse(details) : null;
+  }
+  return null;
+};
+
+export const getCardHash = () => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("cardHash");
   }
   return null;
 };

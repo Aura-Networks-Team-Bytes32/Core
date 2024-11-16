@@ -27,6 +27,7 @@ import { Toaster, toast } from "sonner";
 import {
   setPKPToStorage,
   removeAccountType,
+  setUserDetails,
 } from "@/utils/cache";
 /* eslint-disable */
 
@@ -151,6 +152,7 @@ export default function VerifyPage() {
 
   useEffect(() => {
     if (session && !shouldRedirect) {
+      setUserDetails(session.user?.name);
       setShouldRedirect(true);
 
       // Delay the redirect to show the toast
@@ -170,7 +172,6 @@ export default function VerifyPage() {
   if (session) {
     toast.success("Sign up successful!", {
       description: "Redirecting to dashboard...",
-      duration: 500000,
     });
     return (
       <div className="min-h-screen bg-gray-50 pt-24">
