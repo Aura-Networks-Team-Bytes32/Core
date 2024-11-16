@@ -13,14 +13,26 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import { getPKPFromStorage } from "@/utils/cache";
+import { backendBaseURL } from "@/utils/backend";
+import { litNodeClient } from "@/utils/lit";
+import {
+  LitAbility,
+  LitActionResource,
+  LitPKPResource,
+} from "@lit-protocol/auth-helpers";
+import { useSearchParams } from "next/navigation";
+import { ethers } from "ethers";
+// import { litActionCode } from "@/utils/litAction";
 
 export default function RegisterPage() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
 
-  const handleOtpChange = (
-    index: number,
-    value: string
-  ) => {
+  useEffect(() => {
+    console.log(email);
+  }, [email]);
+  const handleOtpChange = (index: number, value: string) => {
     if (value.length > 1) {
       value = value[0];
     }
@@ -55,11 +67,7 @@ export default function RegisterPage() {
     index: number,
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    if (
-      e.key === "Backspace" &&
-      otp[index] === "" &&
-      index > 0
-    ) {
+    if (e.key === "Backspace" && otp[index] === "" && index > 0) {
       const prevInput = document.querySelector(
         `input[name=otp-${index - 1}]`
       ) as HTMLInputElement;
@@ -72,6 +80,102 @@ export default function RegisterPage() {
   const handleVerify = async () => {
     const otpValue = otp.join("");
     console.log("OTP:", otpValue);
+
+    const message = new Uint8Array(
+      await crypto.subtle.digest(
+        "SHA-256",
+        new TextEncoder().encode("Pay with Aura Networks")
+      )
+    );
+    const pkp = getPKPFromStorage();
+    console.log(pkp, "pkp");
+
+    // await fetch(`${backendBaseURL}/auth/verify-otp`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     email: email,
+    //     otp: otpValue,
+    //   }),
+    // })
+    //   .then((response) => response.status)
+    //   .then((data) => {
+    //     console.log("otp verified:", data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error Sending Email:", error);
+    //   });
+    // const litActionCode = `
+    // (async () => {
+    //   const sigShare = await LitActions.signEcdsa({
+    //     toSign,
+    //     publicKey,
+    //     sigName,
+    //   });
+    // })();
+    // `;
+    // const sessionSignatures = await litNodeClient.getLitActionSessionSigs({
+    //   pkpPublicKey: pkp!.publicKey,
+
+    //   chain: "ethereum",
+    //   resourceAbilityRequests: [
+    //     {
+    //       resource: new LitPKPResource("*"),
+    //       ability: LitAbility.PKPSigning,
+    //     },
+    //     {
+    //       resource: new LitActionResource("*"),
+    //       ability: LitAbility.LitActionExecution,
+    //     },
+    //   ],
+    //   // With this setup you could use either the litActionIpfsId or the litActionCode property
+    //   //litActionIpfsId: litActionCodeIpfsCid,
+
+    //   litActionCode: Buffer.from(litActionCode).toString("base64"),
+    //   jsParams: {
+    //     toSign: message,
+    //     publicKey: pkp!.publicKey,
+    //     sigName: "sig1",
+    //   },
+    // });
+    // console.log(sessionSignatures)
+
+    // const signatures = await litNodeClient.executeJs({
+    //   code: litActionCode,
+    //   sessionSigs: sessionSignatures,
+    //   // all jsParams can be used anywhere in your litActionCode
+    //   jsParams: {
+    //     toSign: message,
+    //     publicKey: pkp!.publicKey,
+    //     sigName: "sig1",
+    //   },
+    // });
+
+    // console.log("signatures: ", JSON.stringify(signatures));
+     
+    await fetch(`${backendBaseURL}/auth/register-user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        worldIdHash: ethers.keccak256(ethers.toUtf8Bytes("input")),
+        debitCardHash: ethers.keccak256(ethers.toUtf8Bytes("hello world")),
+        pkpPublicKey: pkp?.publicKey,
+        userEOA: pkp?.ethAddress,
+      }),
+    })
+      .then((response) => response.status)
+      .then((data) => {
+        console.log("verified and good to go");
+      })
+      .catch((error) => {
+        console.error("Error Sending Email:", error);
+      });
+
     // Add your verification logic here
   };
 
@@ -86,8 +190,7 @@ export default function RegisterPage() {
               Complete Registration
             </CardTitle>
             <CardDescription className="text-center">
-              Enter the 6-digit verification code sent to
-              your email.
+              Enter the 6-digit verification code sent to your email.
             </CardDescription>
           </CardHeader>
 
@@ -101,9 +204,7 @@ export default function RegisterPage() {
                   name={`otp-${index}`}
                   className="w-10 h-10 text-center text-lg font-medium sm:w-12 sm:h-12 focus:border-blue-600 focus:ring-blue-600"
                   value={digit}
-                  onChange={(e) =>
-                    handleOtpChange(index, e.target.value)
-                  }
+                  onChange={(e) => handleOtpChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   maxLength={1}
                 />

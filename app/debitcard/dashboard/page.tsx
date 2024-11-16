@@ -3,19 +3,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import {
-  Copy,
-  CheckCircle,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { Copy, CheckCircle, Eye, EyeOff } from "lucide-react";
 import generateRandomDebitCard from "@/utils/card";
-import {
-  setCardDetails,
-  getCardDetails,
-  getAccountType,
-} from "@/utils/cache";
+import { setCardDetails, getCardDetails, getAccountType } from "@/utils/cache";
 import Navbar from "@/components/Navbar";
+import { Input } from "@/components/ui/input";
+import { backendBaseURL } from "@/utils/backend";
 
 interface CardDetails {
   cardNumber: string;
@@ -23,13 +16,7 @@ interface CardDetails {
   cvv: string;
 }
 
-const CopyButton = ({
-  text,
-  label,
-}: {
-  text: string;
-  label: string;
-}) => {
+const CopyButton = ({ text, label }: { text: string; label: string }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -63,12 +50,35 @@ const CopyButton = ({
 export default function DashboardPage() {
   const { status } = useSession();
   const router = useRouter();
-  const [cardDetails, setCardDetailsState] =
-    useState<CardDetails | null>(null);
+  const [cardDetails, setCardDetailsState] = useState<CardDetails | null>(null);
   const [showCVV, setShowCVV] = useState(false);
-  const [isNewAccount, setIsNewAccount] =
-    useState<boolean>(false);
+  const [isNewAccount, setIsNewAccount] = useState<boolean>(false);
+  const [email, setEmail] = useState("");
 
+  const onRegistartionClick = async () => {
+    console.log(email);
+    
+    //generate otp
+    fetch(`${backendBaseURL}/auth/generate-otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+      }),
+    })
+      .then((response) => {
+        const encodedEmail = encodeURIComponent(email);
+        router.push(`/debitcard/register?email=${encodedEmail}`)
+      })
+      .then((data) => {
+        console.log("Email Sent Successfully:", data);
+      })
+      .catch((error) => {
+        console.error("Error Sending Email:", error);
+      });
+  };
   useEffect(() => {
     const accountType = getAccountType();
     setIsNewAccount(accountType === "new");
@@ -120,11 +130,7 @@ export default function DashboardPage() {
               {/* Card Number */}
               <div className="absolute top-24 left-6 right-6">
                 <div className="flex items-center justify-between text-white text-xl md:text-2xl font-mono tracking-wider">
-                  <span>
-                    {formatCardNumber(
-                      cardDetails.cardNumber
-                    )}
-                  </span>
+                  <span>{formatCardNumber(cardDetails.cardNumber)}</span>
                   <CopyButton
                     text={cardDetails.cardNumber}
                     label="card number"
@@ -135,9 +141,7 @@ export default function DashboardPage() {
               {/* Expiry and CVV */}
               <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
                 <div>
-                  <div className="text-white/70 text-xs mb-1">
-                    VALID THRU
-                  </div>
+                  <div className="text-white/70 text-xs mb-1">VALID THRU</div>
                   <div className="text-white font-mono flex items-center gap-2">
                     {cardDetails.expirationDate}
                     <CopyButton
@@ -147,9 +151,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <div>
-                  <div className="text-white/70 text-xs mb-1">
-                    CVV
-                  </div>
+                  <div className="text-white/70 text-xs mb-1">CVV</div>
                   <div className="text-white font-mono flex items-center gap-2">
                     <button
                       onClick={() => setShowCVV(!showCVV)}
@@ -162,26 +164,31 @@ export default function DashboardPage() {
                         <Eye className="w-4 h-4 text-white/70" />
                       )}
                     </button>
-                    <CopyButton
-                      text={cardDetails.cvv}
-                      label="CVV"
-                    />
+                    <CopyButton text={cardDetails.cvv} label="CVV" />
                   </div>
                 </div>
               </div>
             </div>
           </div>
           {isNewAccount && (
-            <div className="mt-8 flex items-center justify-center">
-              <button
-                onClick={() => {
-                  router.push("/debitcard/register");
-                }}
-                className="w-full md:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
-              >
-                Register Here
-              </button>
-            </div>
+            <>
+              <Input
+                type="email"
+                className="mt-6 flex items-center justify-center max-w-md mx-auto"
+                placeholder="Enter your email!"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <div className="mt-8 flex items-center justify-center">
+                <button
+                  onClick={() => {
+                    onRegistartionClick();
+                  }}
+                  className="w-full md:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
+                >
+                  Register Here
+                </button>
+              </div>
+            </>
           )}
         </div>
       </div>

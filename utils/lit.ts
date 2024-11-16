@@ -31,7 +31,7 @@ export const SELECTED_LIT_NETWORK = ((process.env
 export const litNodeClient: LitNodeClient =
   new LitNodeClient({
     alertWhenUnauthorized: false,
-    litNetwork: SELECTED_LIT_NETWORK,
+    litNetwork: "datil-dev",
     debug: true,
   });
 
