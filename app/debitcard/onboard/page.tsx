@@ -2,18 +2,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  useSession,
-  signOut,
-  signIn,
-} from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import {
   Mail,
   Shield,
   Loader2,
-  LogOut,
   CheckCircle,
-  Copy,
 } from "lucide-react";
 import useAccounts from "@/hooks/useAccounts";
 import useAuthenticate from "@/hooks/useAuthenticate";
@@ -28,6 +22,8 @@ import {
   ProviderType,
 } from "@lit-protocol/constants";
 import Navbar from "@/components/Navbar";
+import { useRouter } from "next/navigation";
+import { Toaster, toast } from "sonner";
 /* eslint-disable */
 
 const VerificationStep = ({
@@ -87,52 +83,10 @@ const VerificationStep = ({
   </div>
 );
 
-const AddressDisplay = ({ address }: { address: any }) => {
-  const [copied, setCopied] = useState(false);
-
-  const formatAddress = (addr: string) => {
-    if (!addr) return "";
-    const start = addr.slice(0, 5);
-    const end = addr.slice(-10);
-    return `${start}...${end}`;
-  };
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(address);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy address:", err);
-    }
-  };
-
-  return (
-    <div className="flex flex-col items-center space-y-2">
-      <div className="bg-gray-50 rounded-lg p-4 w-full max-w-sm flex items-center justify-between gap-2">
-        <div className="font-mono text-sm text-gray-700">
-          {formatAddress(address)}
-        </div>
-        <button
-          onClick={handleCopy}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors group relative"
-          aria-label="Copy address"
-        >
-          {copied ? (
-            <CheckCircle className="w-5 h-5 text-green-600" />
-          ) : (
-            <Copy className="w-5 h-5 text-gray-600 group-hover:text-gray-800 hover:cursor-pointer" />
-          )}
-        </button>
-      </div>
-    </div>
-  );
-};
-
 export default function VerifyPage() {
   const [entered, setEntered] = useState(false);
   const { data: session, status } = useSession();
-
+  const router = useRouter();
   const {
     authMethod,
     loading: authLoading,
@@ -186,6 +140,20 @@ export default function VerifyPage() {
     }
   }, [authMethod]);
 
+  const [shouldRedirect, setShouldRedirect] =
+    useState(false);
+
+  useEffect(() => {
+    if (session && !shouldRedirect) {
+      setShouldRedirect(true);
+
+      // Delay the redirect to show the toast
+      setTimeout(() => {
+        router.push("/debitcard/dashboard");
+      }, 2000);
+    }
+  }, [session, shouldRedirect, router]);
+
   const handleGoogleLogin = async () => {
     await signInWithGoogle(ORIGIN);
   };
@@ -194,32 +162,17 @@ export default function VerifyPage() {
     authLoading || accountsLoading || sessionLoading;
 
   if (session) {
+    toast.success("Sign up successful!", {
+      description: "Redirecting to dashboard...",
+      duration: 500000,
+    });
     return (
       <div className="min-h-screen bg-gray-50 pt-24">
-        <div className="container mx-auto px-4">
-          <div className="max-w-md mx-auto bg-white rounded-xl p-8 shadow-lg border border-gray-100">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-6 h-6 text-green-600" />
-              </div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">
-                Signed In Successfully
-              </h2>
-              <p className="text-gray-600 mb-4">
-                <AddressDisplay
-                  address={session.user?.name}
-                />
-              </p>
-              <button
-                onClick={() => signOut()}
-                className="inline-flex items-center gap-2 px-6 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign out
-              </button>
-            </div>
-          </div>
-        </div>
+        <Toaster
+          richColors
+          position="top-right"
+          visibleToasts={1}
+        />
       </div>
     );
   }
