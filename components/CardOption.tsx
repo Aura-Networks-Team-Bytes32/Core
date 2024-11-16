@@ -62,10 +62,10 @@ const CardOption: React.FC<CardOptionProps> = ({
       // Check if card details exist in cache
       const cardDetails = getCardDetails();
       if (cardDetails) {
-        router.push("/dashboard");
+        router.push("/debitcard/dashboard");
       } else {
         // User is authenticated but no card details - might need to generate new card
-        router.push("/dashboard");
+        router.push("/debitcard/dashboard");
       }
     } else {
       // Not authenticated, go to debit card signup flow
