@@ -3,7 +3,9 @@ import React from "react";
 import CardOption from "@/components/CardOption";
 import { CardType } from "@/types/CardType";
 
-const cardOptions: CardType[] = [
+const cardOptions: (CardType & {
+  isDebitCard?: boolean;
+})[] = [
   {
     title: "Debit Card", // Add your card images to public/images/
     features: [
@@ -11,6 +13,7 @@ const cardOptions: CardType[] = [
       "Instant USDC payments with low fees",
     ],
     route: "/debitcard",
+    isDebitCard: true,
   },
   {
     title: "Credit Card",

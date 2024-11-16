@@ -1,12 +1,20 @@
 "use client";
 
-// src/components/CardOption.tsx
 import React from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
-import { CardType } from "@/types/CardType";
-//   eslint-disable-next-line
-interface CardOptionProps extends CardType {}
+import { useSession } from "next-auth/react";
+import { getCardDetails } from "@/utils/cache";
+
+interface CardType {
+  title: string;
+  features: string[];
+  route: string;
+}
+
+interface CardOptionProps extends CardType {
+  isDebitCard?: boolean;
+}
 
 const Card = () => {
   return (
@@ -36,12 +44,38 @@ const CardOption: React.FC<CardOptionProps> = ({
   title,
   features,
   route,
+  isDebitCard,
 }) => {
   const router = useRouter();
+  const { status } = useSession();
+
+  const handleCardClick = async () => {
+    if (!isDebitCard) {
+      router.push(route);
+      return;
+    }
+
+    // For debit card, check authentication and card details
+    if (status === "loading") return;
+
+    if (status === "authenticated") {
+      // Check if card details exist in cache
+      const cardDetails = getCardDetails();
+      if (cardDetails) {
+        router.push("/dashboard");
+      } else {
+        // User is authenticated but no card details - might need to generate new card
+        router.push("/dashboard");
+      }
+    } else {
+      // Not authenticated, go to debit card signup flow
+      router.push("/debitcard");
+    }
+  };
 
   return (
     <div
-      onClick={() => router.push(route)}
+      onClick={handleCardClick}
       className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all cursor-pointer border border-gray-100"
     >
       {/* Card Image */}
