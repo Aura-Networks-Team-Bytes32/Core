@@ -10,6 +10,7 @@ interface CardType {
   title: string;
   features: string[];
   route: string;
+  isDisabled?: boolean;
 }
 
 interface CardOptionProps extends CardType {
@@ -45,11 +46,13 @@ const CardOption: React.FC<CardOptionProps> = ({
   features,
   route,
   isDebitCard,
+  isDisabled = false,
 }) => {
   const router = useRouter();
   const { status } = useSession();
 
   const handleCardClick = async () => {
+    if (isDisabled) return;
     if (!isDebitCard) {
       router.push(route);
       return;
@@ -76,7 +79,12 @@ const CardOption: React.FC<CardOptionProps> = ({
   return (
     <div
       onClick={handleCardClick}
-      className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all cursor-pointer border border-gray-100"
+      className={`relative bg-white rounded-xl p-6 shadow-md border border-gray-100 transition-all
+        ${
+          isDisabled
+            ? "opacity-75 cursor-not-allowed"
+            : "hover:shadow-xl cursor-pointer"
+        }`}
     >
       {/* Card Image */}
       <div className="relative w-full h-48 mb-6">
@@ -84,8 +92,13 @@ const CardOption: React.FC<CardOptionProps> = ({
       </div>
 
       {/* Title */}
-      <h2 className="text-xl font-bold text-gray-900 mb-4">
-        {title}
+      <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+        {title}{" "}
+        {isDisabled && (
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-600">
+            Coming Soon
+          </span>
+        )}
       </h2>
 
       {/* Features List */}

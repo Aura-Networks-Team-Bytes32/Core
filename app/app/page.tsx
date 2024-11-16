@@ -5,6 +5,7 @@ import { CardType } from "@/types/CardType";
 
 const cardOptions: (CardType & {
   isDebitCard?: boolean;
+  isDisabled?: boolean;
 })[] = [
   {
     title: "Debit Card", // Add your card images to public/images/
@@ -14,6 +15,7 @@ const cardOptions: (CardType & {
     ],
     route: "/debitcard",
     isDebitCard: true,
+    isDisabled: false,
   },
   {
     title: "Credit Card",
@@ -22,6 +24,7 @@ const cardOptions: (CardType & {
       "Secure, private credit data verification on-chain",
     ],
     route: "/creditcard",
+    isDisabled: true,
   },
   {
     title: "FD Credit Card",
@@ -30,10 +33,11 @@ const cardOptions: (CardType & {
       "Earn yield on your staked assets while maintaining credit line",
     ],
     route: "/fd-creditcard",
+    isDisabled: true,
   },
 ];
 
-const page = () => {
+const App = () => {
   return (
     <main>
       <Navbar pageType="app" />
@@ -53,4 +57,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default App;
