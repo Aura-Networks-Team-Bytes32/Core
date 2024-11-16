@@ -53,6 +53,11 @@ export const ORIGIN =
     ? `https://${DOMAIN}`
     : `http://${DOMAIN}:3000/debitcard/onboard`;
 
+export const MERCHANT_ORIGIN =
+  process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
+    ? `https://${DOMAIN}`
+    : `http://${DOMAIN}:3000/merchant/onboard`;
+
 export async function signInWithGoogle(
   redirectUri: string
 ): Promise<void> {

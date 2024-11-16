@@ -263,6 +263,109 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
+      <section className="py-12 sm:py-20">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 md:p-12 border border-gray-100 shadow-lg relative overflow-hidden mx-4 sm:mx-6">
+            {/* Background Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-purple-600/5" />
+
+            {/* Content */}
+            <div className="relative">
+              <div className="flex items-center justify-center">
+                <div>
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
+                    Become a Merchant Today
+                  </h3>
+                  <p className="text-gray-600 mb-6 text-sm sm:text-base">
+                    Join our growing network of merchants
+                    and start accepting Web3 payments. Set
+                    up your account in minutes and transform
+                    your business.
+                  </p>
+                  <ul className="space-y-3 mb-8 text-sm sm:text-base">
+                    <li className="flex items-center gap-2 text-gray-600">
+                      <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
+                        <svg
+                          className="w-3 h-3 text-green-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      No setup fees
+                    </li>
+                    <li className="flex items-center gap-2 text-gray-600">
+                      <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
+                        <svg
+                          className="w-3 h-3 text-green-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      24/7 support
+                    </li>
+                    <li className="flex items-center gap-2 text-gray-600">
+                      <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
+                        <svg
+                          className="w-3 h-3 text-green-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      Real-time analytics
+                    </li>
+                  </ul>
+                </div>
+
+                {/* <div className="bg-gray-50 rounded-xl p-6 md:p-8">
+                  <div className="text-center mb-6">
+                    <div className="text-lg font-bold text-gray-900">
+                      Get Started Now
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Complete registration in minutes
+                    </div>
+                  </div>
+                  <Link
+                    href="/merchant/register"
+                    className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
+                  >
+                    Register as Merchant
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <div className="mt-4 text-center text-sm text-gray-500">
+                    No credit card required
+                  </div>
+                </div> */}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="container mx-auto px-4">

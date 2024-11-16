@@ -24,6 +24,18 @@ export const setUserDetails = (worldId: string) => {
   }
 };
 
+export const setMerchantToken = (token: string) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("merchantToken", token);
+  }
+};
+
+export const getMerchantToken = () => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("merchantToken");
+  }
+  return null;
+};
 export const getUserDetails = () => {
   if (typeof window !== "undefined") {
     return localStorage.getItem("worldId");
