@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import {
   Copy,
   CheckCircle,
   Eye,
-  LogOut,
   EyeOff,
 } from "lucide-react";
 import generateRandomDebitCard from "@/utils/card";
@@ -100,25 +99,12 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <Navbar pageType="app" />
-      <div className="container mx-auto px-4 py-20">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Your Debit Card
-            </h1>
-            <button
-              onClick={() => signOut()}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition-colors"
-            >
-              <LogOut className="w-4 h-4" />
-              Sign out
-            </button>
-          </div>
+      <Navbar pageType="debitcard" />
 
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto pt-16">
           {/* Card Display */}
-          <div className="w-full max-w-md mx-auto perspective-1000">
+          <div className="relative w-full max-w-md mx-auto perspective-1000">
             <div className="relative w-full aspect-[1.586/1] rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 p-6 shadow-xl hover:scale-105 transition-transform duration-300">
               {/* Chip */}
               <div className="absolute top-6 left-6">
