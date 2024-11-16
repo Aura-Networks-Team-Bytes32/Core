@@ -13,6 +13,7 @@ import generateRandomDebitCard from "@/utils/card";
 import {
   setCardDetails,
   getCardDetails,
+  getAccountType,
 } from "@/utils/cache";
 import Navbar from "@/components/Navbar";
 
@@ -65,13 +66,18 @@ export default function DashboardPage() {
   const [cardDetails, setCardDetailsState] =
     useState<CardDetails | null>(null);
   const [showCVV, setShowCVV] = useState(false);
+  const [isNewAccount, setIsNewAccount] =
+    useState<boolean>(false);
 
+  useEffect(() => {
+    const accountType = getAccountType();
+    setIsNewAccount(accountType === "new");
+  }, []);
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/");
     }
   }, [status, router]);
-
   useEffect(() => {
     // Check cache first
     const cachedDetails = getCardDetails();
@@ -165,6 +171,18 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
+          {isNewAccount && (
+            <div className="mt-8 flex items-center justify-center">
+              <button
+                onClick={() => {
+                  router.push("/debitcard/register");
+                }}
+                className="w-full md:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
+              >
+                Register Here
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </main>

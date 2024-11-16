@@ -24,6 +24,10 @@ import {
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
+import {
+  setPKPToStorage,
+  removeAccountType,
+} from "@/utils/cache";
 /* eslint-disable */
 
 const VerificationStep = ({
@@ -129,6 +133,8 @@ export default function VerifyPage() {
         } else {
           console.log("init session");
           await initSession(authMethod, pkps[0]);
+          removeAccountType();
+          setPKPToStorage(pkps[0]);
         }
         setEntered(true);
       }
