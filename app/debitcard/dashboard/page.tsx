@@ -59,7 +59,7 @@ export default function DashboardPage() {
     console.log(email);
     
     //generate otp
-    fetch(`${backendBaseURL}/auth/generate-otp`, {
+    await fetch(`${backendBaseURL}/auth/generate-otp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -79,10 +79,15 @@ export default function DashboardPage() {
         console.error("Error Sending Email:", error);
       });
   };
+
+
+
   useEffect(() => {
     const accountType = getAccountType();
     setIsNewAccount(accountType === "new");
   }, []);
+
+  
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/");

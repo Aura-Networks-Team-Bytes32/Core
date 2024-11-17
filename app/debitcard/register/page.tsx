@@ -105,23 +105,23 @@ export default function RegisterPage() {
     const pkp = getPKPFromStorage();
     console.log(pkp, "pkp");
 
-    // await fetch(`${backendBaseURL}/auth/verify-otp`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     email: email,
-    //     otp: otpValue,
-    //   }),
-    // })
-    //   .then((response) => response.status)
-    //   .then((data) => {
-    //     console.log("otp verified:", data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error Sending Email:", error);
-    //   });
+    await fetch(`${backendBaseURL}/auth/verify-otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        otp: otpValue,
+      }),
+    })
+      .then((response) => response.status)
+      .then((data) => {
+        console.log("otp verified:", data);
+      })
+      .catch((error) => {
+        console.error("Error Sending Email:", error);
+      });
     // const litActionCode = `
     // (async () => {
     //   const sigShare = await LitActions.signEcdsa({
