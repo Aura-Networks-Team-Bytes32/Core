@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import {
   Card,
   CardContent,
@@ -12,11 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
-import {
-  getPKPFromStorage,
-  getUserDetails,
-  getCardHash,
-} from "@/utils/cache";
+import { getPKPFromStorage, getUserDetails, getCardHash } from "@/utils/cache";
 import { backendBaseURL } from "@/utils/backend";
 import { litNodeClient } from "@/utils/lit";
 import {
@@ -24,14 +21,14 @@ import {
   LitActionResource,
   LitPKPResource,
 } from "@lit-protocol/auth-helpers";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 import { ethers } from "ethers";
 // import { litActionCode } from "@/utils/litAction";
 
 export default function RegisterPage() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const searchParams = useSearchParams();
-  const email = searchParams.get("email");
+  // const searchParams = useSearchParams();
+  const email = "hello@gmail.com";
   const worldId = getUserDetails();
   const cardHash = getCardHash();
 
@@ -40,10 +37,7 @@ export default function RegisterPage() {
     console.log(worldId, "worldId");
     console.log(cardHash, "cardHash");
   }, [email, worldId, cardHash]);
-  const handleOtpChange = (
-    index: number,
-    value: string
-  ) => {
+  const handleOtpChange = (index: number, value: string) => {
     if (value.length > 1) {
       value = value[0];
     }
@@ -78,11 +72,7 @@ export default function RegisterPage() {
     index: number,
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    if (
-      e.key === "Backspace" &&
-      otp[index] === "" &&
-      index > 0
-    ) {
+    if (e.key === "Backspace" && otp[index] === "" && index > 0) {
       const prevInput = document.querySelector(
         `input[name=otp-${index - 1}]`
       ) as HTMLInputElement;
@@ -177,12 +167,8 @@ export default function RegisterPage() {
       },
       body: JSON.stringify({
         email: email,
-        worldIdHash: ethers.keccak256(
-          ethers.toUtf8Bytes(worldId)
-        ),
-        debitCardHash: ethers.keccak256(
-          ethers.toUtf8Bytes(cardHash)
-        ),
+        worldIdHash: ethers.keccak256(ethers.toUtf8Bytes(worldId ?? "")),
+        debitCardHash: ethers.keccak256(ethers.toUtf8Bytes(cardHash ?? "")),
         pkpPublicKey: pkp?.publicKey,
         userEOA: pkp?.ethAddress,
       }),
@@ -209,8 +195,7 @@ export default function RegisterPage() {
               Complete Registration
             </CardTitle>
             <CardDescription className="text-center">
-              Enter the 6-digit verification code sent to
-              your email.
+              Enter the 6-digit verification code sent to your email.
             </CardDescription>
           </CardHeader>
 
@@ -224,9 +209,7 @@ export default function RegisterPage() {
                   name={`otp-${index}`}
                   className="w-10 h-10 text-center text-lg font-medium sm:w-12 sm:h-12 focus:border-blue-600 focus:ring-blue-600"
                   value={digit}
-                  onChange={(e) =>
-                    handleOtpChange(index, e.target.value)
-                  }
+                  onChange={(e) => handleOtpChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   maxLength={1}
                 />

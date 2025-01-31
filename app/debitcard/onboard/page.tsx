@@ -3,24 +3,12 @@
 
 import { useEffect, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
-import {
-  Mail,
-  Shield,
-  Loader2,
-  CheckCircle,
-} from "lucide-react";
+import { Mail, Shield, Loader2, CheckCircle } from "lucide-react";
 import useAccounts from "@/hooks/useAccounts";
 import useAuthenticate from "@/hooks/useAuthenticate";
 import useSessionHook from "@/hooks/useSession";
-import {
-  ORIGIN,
-  litAuthClient,
-  signInWithGoogle,
-} from "@/utils/lit";
-import {
-  AuthMethodType,
-  ProviderType,
-} from "@lit-protocol/constants";
+import { ORIGIN, litAuthClient, signInWithGoogle } from "@/utils/lit";
+import { AuthMethodType, ProviderType } from "@lit-protocol/constants";
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
@@ -76,12 +64,8 @@ const VerificationStep = ({
         )}
       </div>
       <div className="flex-grow">
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">
-          {title}
-        </h3>
-        <p className="text-gray-600 mb-4 text-sm md:text-base">
-          {description}
-        </p>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">{title}</h3>
+        <p className="text-gray-600 mb-4 text-sm md:text-base">{description}</p>
         {actionButton}
       </div>
     </div>
@@ -115,18 +99,9 @@ export default function VerifyPage() {
 
   useEffect(() => {
     const func = async () => {
-      if (
-        authMethod &&
-        authMethod.authMethodType !==
-          AuthMethodType.WebAuthn
-      ) {
-        const provider = litAuthClient.getProvider(
-          ProviderType.Google
-        );
-        const pkps =
-          await provider!.fetchPKPsThroughRelayer(
-            authMethod
-          );
+      if (authMethod && authMethod.authMethodType !== AuthMethodType.WebAuthn) {
+        const provider = litAuthClient.getProvider(ProviderType.Google);
+        const pkps = await provider!.fetchPKPsThroughRelayer(authMethod);
 
         if (pkps.length === 0) {
           console.log("creating account");
@@ -147,12 +122,11 @@ export default function VerifyPage() {
     }
   }, [authMethod]);
 
-  const [shouldRedirect, setShouldRedirect] =
-    useState(false);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
 
   useEffect(() => {
     if (session && !shouldRedirect) {
-      setUserDetails(session.user?.name);
+      setUserDetails(session.user?.name || "");
       setShouldRedirect(true);
 
       // Delay the redirect to show the toast
@@ -166,8 +140,7 @@ export default function VerifyPage() {
     await signInWithGoogle(ORIGIN);
   };
 
-  const isLoading =
-    authLoading || accountsLoading || sessionLoading;
+  const isLoading = authLoading || accountsLoading || sessionLoading;
 
   if (session) {
     toast.success("Sign up successful!", {
@@ -175,11 +148,7 @@ export default function VerifyPage() {
     });
     return (
       <div className="min-h-screen bg-gray-50 pt-24">
-        <Toaster
-          richColors
-          position="top-right"
-          visibleToasts={1}
-        />
+        <Toaster richColors position="top-right" visibleToasts={1} />
       </div>
     );
   }
@@ -194,8 +163,7 @@ export default function VerifyPage() {
             Verify Your Identity
           </h1>
           <p className="text-gray-600 text-center mb-12 text-sm md:text-base">
-            Complete these verification steps to activate
-            your Web3 debit card
+            Complete these verification steps to activate your Web3 debit card
           </p>
 
           <div className="space-y-4">

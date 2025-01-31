@@ -2,15 +2,11 @@ import { useCallback, useState } from "react";
 import { AuthMethod } from "@lit-protocol/types";
 import { getPKPs, mintPKP } from "../utils/lit";
 import { IRelayPKP } from "@lit-protocol/types";
-import {
-  setPKPToStorage,
-  setAccountType,
-} from "@/utils/cache";
+import { setPKPToStorage, setAccountType } from "@/utils/cache";
 
 export default function useAccounts() {
   const [accounts, setAccounts] = useState<IRelayPKP[]>([]);
-  const [currentAccount, setCurrentAccount] =
-    useState<IRelayPKP>();
+  const [currentAccount, setCurrentAccount] = useState<IRelayPKP>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
 
@@ -52,8 +48,8 @@ export default function useAccounts() {
         setPKPToStorage(newPKP[0]);
         setAccountType("new");
         // console.log('createAccount pkp: ', newPKP);
-        setAccounts((prev) => [...prev, newPKP]);
-        setCurrentAccount(newPKP);
+        setAccounts((prev) => [...prev, newPKP[0]]);
+        setCurrentAccount(newPKP[0]);
       } catch (err: any) {
         setError(err);
       } finally {
