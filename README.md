@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aura Network Overview 
 
-## Getting Started
+- Fast and efficient card payments in the decentralized ecosystem, similar to traditional debit cards.
+- Bridges the gap between DeFi and everyday card usage, making the experience seamless.
 
-First, run the development server:
+## How It's Made
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Phase 1: Debit Cards
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### User Onboarding and Proof-of-Personhood
+- We use Lit Protocol to create a unique Programmable Key Pair (PKP) for each user.
+- Worldcoin verifies users through proof-of-personhood using their Gmail accounts, ensuring secure access.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+#### Transaction Signing and Automation
+- The minted PKP automatically signs transactions via Lit Actions.
+- Security is ensured with OTP (One-Time Password) authentication, linked to debit card details.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### Transaction Execution and Recovery
+- Transactions are processed on the Polygon network to reduce fees.
+- Once a transaction is sent, we assume it's successful. If not, Blockless ensures validation and recovery through its off-chain consensus.
 
-## Learn More
+#### Ledger Management with Smart Contracts
+- All fund transfers are managed by a smart contract, updating mappings like a traditional banking system.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Upcoming Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Phase 2: Credit Scoring and Limit Allocation
+- Chainlink DECO securely retrieves and verifies users’ credit scores while maintaining privacy.
+- Credit limits are dynamically allocated based on users’ credit scores, offering greater flexibility.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Phase 3: Asset-Based Credit Cards and Multi-Chain Asset Locking
+- FD-Based Credit Card: Users can create a fixed deposit-backed credit card, securing credit while earning yields.
+- Multi-Chain Asset Locking: Lock assets across multiple blockchains, aggregated and bridged to Polygon.
+- Base Chain Credit Limit: Provides a credit limit based on locked assets, usable on the Polygon network.
